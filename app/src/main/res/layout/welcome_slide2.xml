@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/icon_checked"
+        android:background="#FFF"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/bleuCiel"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_checked"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/desc_checked"
+        android:layout_below="@+id/icon_checked"
+        android:layout_marginTop="5dp"
+        android:textColor="#000"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:backgroundTint="@color/bleuCiel"
+        android:layout_height="wrap_content"
+        android:text="Cet icon désigne que la piscine possède bien l'élément associé."/>
+    <ImageView
+        android:id="@+id/icon_cancel"
+        android:layout_below="@+id/desc_checked"
+        android:background="#FFF"
+        android:layout_width="40dp"
+        android:backgroundTint="@color/bleuCiel"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_cancel"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/desc_cancel"
+        android:layout_below="@+id/icon_cancel"
+        android:layout_marginTop="5dp"
+        android:textAlignment="center"
+        android:textColor="#000"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cet icon désigne que la piscine ne possède pas l'élément associé."/>
+    <ImageView
+        android:id="@+id/icon_question"
+        android:layout_below="@+id/desc_cancel"
+        android:background="#FFF"
+        android:layout_width="40dp"
+        android:backgroundTint="@color/bleuCiel"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_question"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:id="@+id/desc_question"
+        android:layout_below="@+id/icon_question"
+        android:layout_marginTop="5dp"
+        android:textColor="#000"
+        android:textSize="20dp"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text="Cet icon désigne que l'information sur l'élément associé n'est pas connu."/>
+</RelativeLayout>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ProjetLP</string>
+    <string name="desc_1">Sur la page d\'accueil vous trouverez la liste des piscines de Nantes avec plusieurs information
+tel que si elle possède un bassin de loisir, une pataugeoire et un bassin sportif mais vous trouverez aussi sa note que vous lui
+avez attribuée ainsi que si vous avez visité la piscine ou non</string>
+    <string name="desc_2">En cliquant sur une piscine de la liste vous ouvrirez une nouvelle page avec les details de la piscine selectionnée.
+Vous pourrez ainsi les téléphoner(en cliquant sur leur numéro), les géolocaliser(en cliquant sur leur addresse) ou encore acceder à leurs sites (en cliquant sur leur url) (si les informations sont précisées).
+En descencant vous pourrez aussi dire si vous avez visité la piscine et lui attribuer une note sur 5. Cliquez sur valider pour enregistrer ces dernières informations</string>
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">SUIVANT</string>
+    <string name="skip">QUITTER</string>
+    <string name="start">OK</string>
+</resources>

@@ -1,0 +1,159 @@
+package com.example.mdiya.projetlp;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Accueil extends AppCompatActivity {
+
+    public static ArrayList<Piscine> maListe;
+    public static CustomAdapter customAdapter;
+    SharedPreferences sharedPreferences;
+    private final int MYFLAG = 1234;
+    private PrefManager prefManager;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_accueil);
+        maListe = new ArrayList<Piscine>();
+        final ListView myList = (ListView) findViewById(R.id.mylist);
+
+        customAdapter = new CustomAdapter(this);
+        if(ConnexionInternet.isConnectedInternet(Accueil.this)){
+            Ion.with(this)
+                    .load( "https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_piscines-nantes-metropole&rows=15")
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>(){
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            JsonArray records = result.getAsJsonArray("records");
+                            Iterator<JsonElement> ite = records.iterator();
+                            while(ite.hasNext()){
+                                JsonObject item = ite.next().getAsJsonObject();
+                                JsonObject fields = item.getAsJsonObject("fields");
+                                String nom = fields.getAsJsonPrimitive("nom_usuel").getAsString();
+                                String nomComplet = fields.getAsJsonPrimitive("nom_complet").getAsString();
+                                String ville = fields.getAsJsonPrimitive("commune").getAsString();
+                                int loisir =0, patauge=0,sport=0;
+                                float lanote = (float) 0.0;
+                                boolean visit, note;
+                                if(fields.has("bassin_loisir") ){
+                                    if (fields.getAsJsonPrimitive("bassin_loisir").getAsString().equals("OUI")){
+                                        loisir = 1;
+                                    }
+                                    else {
+                                        loisir = 0;
+                                    }
+                                }
+                                else{
+                                    loisir = -1;
+                                }
+                                if(fields.has("bassin_sportif")) {
+                                    if (fields.getAsJsonPrimitive("bassin_sportif").getAsString().equals("OUI")) {
+                                        sport = 1;
+                                    } else {
+                                        sport = 0;
+                                    }
+                                }
+                                else{
+                                    sport = -1;
+                                }
+                                if(fields.has("pataugeoire")){
+                                    if(fields.getAsJsonPrimitive("pataugeoire").getAsString().equals("OUI")) {
+                                        patauge = 1;
+                                    }
+                                    else {
+                                        patauge = 0;
+                                    }
+                                }
+                                else{
+                                    patauge = -1;
+                                }
+                                int id = fields.getAsJsonPrimitive("idobj").getAsInt();
+                                String myId = Integer.toString(id);
+                                sharedPreferences = Accueil.this.getSharedPreferences(myId, Context.MODE_PRIVATE);
+                                if(sharedPreferences.contains("sauv") && sharedPreferences.getBoolean("sauv", false)){
+                                    visit = true;
+                                }
+                                else {
+                                    visit = false;
+                                }
+                                if(sharedPreferences.contains("rate")){
+                                    note = true;
+                                    lanote = sharedPreferences.getFloat("rate",0);
+                                }
+                                else{
+                                    note = false;
+                                }
+                                Piscine piscine = new Piscine(nom,nomComplet,ville,loisir,patauge,sport,visit,note, id, lanote);
+                                maListe.add(piscine);
+                            }
+                            customAdapter.notifyDataSetChanged();
+                            myList.setAdapter(customAdapter);
+
+                        }
+
+                    });
+        }
+
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(Accueil.this, Details.class);
+                Piscine piscine = (Piscine) customAdapter.getItem(position);
+                int i = piscine.getId();
+                String extraId = Integer.toString(i);
+                intent.putExtra("id", extraId);
+                startActivityForResult(intent, MYFLAG);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MYFLAG) {
+            if (resultCode == RESULT_OK) {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent introduction = new Intent(Accueil.this, WelcomeActivity.class);
+        prefManager = new PrefManager(getApplicationContext());
+        prefManager.setFirstTimeLaunch(true);
+        startActivity(introduction);
+        return true;
+    }
+}
