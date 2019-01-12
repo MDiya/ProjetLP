@@ -71,7 +71,7 @@ public class Details extends AppCompatActivity {
 
         final String[] location = {""};
         final String[] tmpString = {""};
-
+        final String[] lasemaine = new String[]{"lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"};
         final HashMap<String,ArrayList<String>> lesJours = new HashMap<>();
         lesJours.put("lundi", new ArrayList<String>());
         lesJours.put("mardi", new ArrayList<String>());
@@ -365,23 +365,20 @@ public class Details extends AppCompatActivity {
                                 lesHoraires.add(ajout);
                             }
                             String finalHoraire = "";
-                            Set cles = lesJours.keySet();
-                            Iterator it = cles.iterator();
-                            while (it.hasNext()){
-                                String cle = it.next().toString();
-                                ArrayList<String> valeur = lesJours.get(cle);
-                                if(lesJours.containsKey(cle)){
-                                    if (!lesJours.get(cle).isEmpty()) {
-                                        finalHoraire = finalHoraire + " " + cle + " : ";
-                                        for (String s : valeur) {
-                                            finalHoraire = finalHoraire + s + " ";
-                                        }
-                                        finalHoraire = finalHoraire+"\n";
+                            boolean vide = true;
+                            for (int i = 0; i<7;i++){
+                                finalHoraire = finalHoraire + lasemaine[i] +" ";
+                                if(lesJours.containsKey(lasemaine[i]) && !lesJours.get(lasemaine[i]).isEmpty()){
+                                    vide = false;
+                                    for (String s : lesJours.get(lasemaine[i])) {
+                                        finalHoraire = finalHoraire + s + " ";
                                     }
-
                                 }
+                                else finalHoraire = finalHoraire + "fermé";
+                                finalHoraire = finalHoraire+"\n";
                             }
-                            if (finalHoraire.equals("")){
+
+                            if (vide){
                                 horaires.setHeight(0);
                             }
                             horaires.setText(finalHoraire);
