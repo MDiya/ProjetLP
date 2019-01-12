@@ -29,10 +29,13 @@ import com.koushikdutta.ion.Ion;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 public class Details extends AppCompatActivity {
@@ -353,7 +356,7 @@ public class Details extends AppCompatActivity {
                                 JsonObject fields = item.getAsJsonObject("fields");
                                 if (fields.has("jour") && lesJours.containsKey(fields.getAsJsonPrimitive("jour").getAsString())){
                                     if(fields.has("heure_debut")){
-                                        ajout = ajout + fields.getAsJsonPrimitive("heure_debut").getAsString() +" ";
+                                        ajout = ajout + fields.getAsJsonPrimitive("heure_debut").getAsString() +" à ";
                                     }
                                     if(fields.has("heure_fin")){
                                         ajout = ajout + fields.getAsJsonPrimitive("heure_fin").getAsString() +" ";
@@ -364,24 +367,35 @@ public class Details extends AppCompatActivity {
                                 }
                                 lesHoraires.add(ajout);
                             }
-                            String finalHoraire = "";
+                            StringBuilder finalHoraire = new StringBuilder();
                             boolean vide = true;
                             for (int i = 0; i<7;i++){
-                                finalHoraire = finalHoraire + lasemaine[i] +" ";
-                                if(lesJours.containsKey(lasemaine[i]) && !lesJours.get(lasemaine[i]).isEmpty()){
+                                finalHoraire.append(lasemaine[i]).append(" ");
+                                if(lesJours.containsKey(lasemaine[i]) && !Objects.requireNonNull(lesJours.get(lasemaine[i])).isEmpty()){
                                     vide = false;
-                                    for (String s : lesJours.get(lasemaine[i])) {
-                                        finalHoraire = finalHoraire + s + " ";
+                                    Collections.sort(lesJours.get(lasemaine[i]), new Comparator<String>() {
+                                        public int compare(String o1, String o2) {
+                                            return extractInt(o1) - extractInt(o2);
+                                        }
+
+                                        int extractInt(String s) {
+                                            String num = s.replaceAll("\\D", "");
+                                            // return 0 if no digits found
+                                            return num.isEmpty() ? 0 : Integer.parseInt(num);
+                                        }
+                                    });
+                                    for (String s : Objects.requireNonNull(lesJours.get(lasemaine[i]))) {
+                                        finalHoraire.append(s).append(" ");
                                     }
                                 }
-                                else finalHoraire = finalHoraire + "fermé";
-                                finalHoraire = finalHoraire+"\n";
+                                else finalHoraire.append("fermé");
+                                finalHoraire.append("\n");
                             }
 
                             if (vide){
-                                horaires.setHeight(0);
+                                horaires.setText("Horaires indisponibles");
                             }
-                            horaires.setText(finalHoraire);
+                            else horaires.setText(finalHoraire.toString());
                         }
                     });
         }
