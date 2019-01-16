@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -67,6 +68,17 @@ public class Accueil extends AppCompatActivity {
                                 int loisir =0, patauge=0,sport=0;
                                 float lanote = (float) 0.0;
                                 boolean visit, note;
+                                String adr = "";
+                                if (fields.has("adresse")){
+                                    adr = adr +fields.getAsJsonPrimitive("adresse").getAsString() +", ";
+                                }
+                                else {
+                                    adr+=("");
+                                }
+                                adr = adr + fields.getAsJsonPrimitive("commune").getAsString()+ ", ";
+                                if (fields.has("cp")){
+                                    adr = adr +fields.getAsJsonPrimitive("cp").getAsString();
+                                }
                                 if(fields.has("bassin_loisir") ){
                                     if (fields.getAsJsonPrimitive("bassin_loisir").getAsString().equals("OUI")){
                                         loisir = 1;
@@ -115,7 +127,7 @@ public class Accueil extends AppCompatActivity {
                                 else{
                                     note = false;
                                 }
-                                Piscine piscine = new Piscine(nom,nomComplet,ville,loisir,patauge,sport,visit,note, id, lanote);
+                                Piscine piscine = new Piscine(nom,nomComplet,ville,loisir,patauge,sport,visit,note, id, lanote, adr);
                                 maListe.add(piscine);
                             }
                             customAdapter.notifyDataSetChanged();
@@ -142,29 +154,26 @@ public class Accueil extends AppCompatActivity {
         loisir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Collections.sort(maListe);
+                customAdapter.notifyDataSetChanged();
+            }
+        });
+
+        ImageButton star = (ImageButton) findViewById(R.id.sortstar);
+        star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Collections.sort(maListe, new Comparator<Piscine>() {
                     @Override
                     public int compare(Piscine o1, Piscine o2) {
-                        if (o1.isLoisir() == 1){
-                            return 1;
-                        }
-                        else{
-                            return 0;
-                        }
+                        return Float.floatToIntBits(o2.getNote() - o1.getNote());
                     }
                 });
                 customAdapter.notifyDataSetChanged();
             }
         });
 
-        ImageButton star = (ImageButton) findViewById(R.id.sortstar);
-        loisir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collections.sort(maListe);
-                customAdapter.notifyDataSetChanged();
-            }
-        });
+        //TextView
     }
 
     @Override

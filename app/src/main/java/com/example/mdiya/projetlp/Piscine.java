@@ -37,10 +37,11 @@ class Piscine implements Comparable{
     //@NonNull
     //@ColumnInfo(name = "id")
     private int id;
+    private String adr;
 
     public Piscine( String n,  String nc,  String v,  int l,
                     int p, int s, boolean visiter, boolean noter,
-                    int i, float lanote){
+                    int i, float lanote, String adr){
         this.nom =n;
         this.nomComplet = nc;
         this.ville = v;
@@ -51,6 +52,7 @@ class Piscine implements Comparable{
         this.noter = noter;
         this.id =i;
         this.note = lanote;
+        this.adr=adr;
     }
 
     public String getNom(){return nom;}
