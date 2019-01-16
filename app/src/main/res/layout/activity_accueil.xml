@@ -28,7 +28,7 @@
             android:textSize="20sp"/>
 
 
-        <ImageView
+        <ImageButton
             android:id="@+id/loisir"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -36,14 +36,14 @@
             android:layout_toRightOf="@+id/nomDelaPiscine"
             android:layout_marginRight="15dp"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/bebe"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_crawling_baby_silhouette"
             android:layout_marginRight="15dp"
             android:layout_toRightOf="@+id/loisir"/>
-        <ImageView
+        <ImageButton
             android:id="@+id/imgsport"
             android:layout_toRightOf="@+id/bebe"
             android:layout_width="40dp"
@@ -61,7 +61,8 @@
             android:textSize="20sp"
             android:layout_marginTop="5dp"/>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/sortstar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_star"

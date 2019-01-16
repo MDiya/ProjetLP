@@ -1,6 +1,7 @@
 package com.example.mdiya.projetlp;
 
 import android.annotation.SuppressLint;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,7 +25,10 @@ import com.koushikdutta.ion.Ion;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+
 
 public class Accueil extends AppCompatActivity {
 
@@ -38,6 +43,8 @@ public class Accueil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accueil);
+//        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+//                AppDatabase.class, "database-name").build();
         maListe = new ArrayList<Piscine>();
         final ListView myList = (ListView) findViewById(R.id.mylist);
 
@@ -128,6 +135,34 @@ public class Accueil extends AppCompatActivity {
                 String extraId = Integer.toString(i);
                 intent.putExtra("id", extraId);
                 startActivityForResult(intent, MYFLAG);
+            }
+        });
+
+        ImageButton loisir = (ImageButton) findViewById(R.id.loisir);
+        loisir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(maListe, new Comparator<Piscine>() {
+                    @Override
+                    public int compare(Piscine o1, Piscine o2) {
+                        if (o1.isLoisir() == 1){
+                            return 1;
+                        }
+                        else{
+                            return 0;
+                        }
+                    }
+                });
+                customAdapter.notifyDataSetChanged();
+            }
+        });
+
+        ImageButton star = (ImageButton) findViewById(R.id.sortstar);
+        loisir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(maListe);
+                customAdapter.notifyDataSetChanged();
             }
         });
     }

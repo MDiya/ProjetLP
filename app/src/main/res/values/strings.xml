@@ -10,4 +10,5 @@ En descencant vous pourrez aussi dire si vous avez visité la piscine et lui att
     <string name="next">SUIVANT</string>
     <string name="skip">QUITTER</string>
     <string name="start">OK</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

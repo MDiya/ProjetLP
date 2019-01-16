@@ -1,13 +1,46 @@
 package com.example.mdiya.projetlp;
 
-class Piscine {
-    private String nom,nomComplet,ville;
-    private int loisir, patauge, sport;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+//@Entity(tableName = "piscine_table")
+class Piscine implements Comparable{
+  //  @NonNull
+    //@ColumnInfo(name = "nom")
+    private String nom;
+    //@NonNull
+    //@ColumnInfo(name = "nomComplet")
+    private  String nomComplet;
+    //@NonNull
+    //@ColumnInfo(name = "ville")
+    private  String ville;
+    //@NonNull
+    //@ColumnInfo(name = "loisir")
+    private int loisir;
+    //@NonNull
+    //@ColumnInfo(name = "pautage")
+    private int patauge;
+    //@NonNull
+    //@ColumnInfo(name = "sport")
+    private int sport;
+    //@NonNull
+    //@ColumnInfo(name = "note")
     private float note = -1;
-    private boolean  visiter, noter;
+    //@NonNull
+    //@ColumnInfo(name = "visiter")
+    private boolean visiter;
+    //@NonNull
+    //@ColumnInfo(name = "noter")
+    private boolean noter;
+    //@PrimaryKey
+    //@NonNull
+    //@ColumnInfo(name = "id")
     private int id;
 
-    public Piscine(String n, String nc,String v, int l, int p, int s, boolean visiter, boolean noter, int i, float lanote){
+    public Piscine( String n,  String nc,  String v,  int l,
+                    int p, int s, boolean visiter, boolean noter,
+                    int i, float lanote){
         this.nom =n;
         this.nomComplet = nc;
         this.ville = v;
@@ -55,5 +88,11 @@ class Piscine {
     @Override
     public String toString() {
         return ville+" "+nom;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        int compare = ((Piscine)o).isLoisir();
+        return compare- this.isLoisir();
     }
 }

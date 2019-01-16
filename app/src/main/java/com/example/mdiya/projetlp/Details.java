@@ -375,7 +375,7 @@ public class Details extends AppCompatActivity {
                                     vide = false;
                                     Collections.sort(lesJours.get(lasemaine[i]), new Comparator<String>() {
                                         public int compare(String o1, String o2) {
-                                            return extractInt(o1) - extractInt(o2);
+                                            return extractInt(o1) -extractInt(o2);
                                         }
 
                                         int extractInt(String s) {
