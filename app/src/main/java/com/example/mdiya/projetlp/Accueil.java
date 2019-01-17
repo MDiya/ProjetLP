@@ -38,6 +38,7 @@ public class Accueil extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private final int MYFLAG = 1234;
     private PrefManager prefManager;
+    //private FusedLocationProviderClient mFusedLocationClient;
 
 
     @Override
@@ -173,7 +174,52 @@ public class Accueil extends AppCompatActivity {
             }
         });
 
-        //TextView
+        TextView sortvisiter = (TextView) findViewById(R.id.sortvisiter);
+        sortvisiter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(maListe, new Comparator<Piscine>() {
+                    @Override
+                    public int compare(Piscine o1, Piscine o2) {
+                        int res =0;
+                        if (o1.isVisiter()){
+                            res--;
+                        }
+                        if (o2.isVisiter()){
+                            res++;
+                        }
+                        return res;
+                    }
+                });
+                customAdapter.notifyDataSetChanged();
+            }
+        });
+        ImageButton baby = (ImageButton) findViewById(R.id.bebe);
+        baby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(maListe, new Comparator<Piscine>() {
+                    @Override
+                    public int compare(Piscine o1, Piscine o2) {
+                        return o2.isPatauge()-o1.isPatauge();
+                    }
+                });
+                customAdapter.notifyDataSetChanged();
+            }
+        });
+        ImageButton sortsport = (ImageButton) findViewById(R.id.imgsport);
+        sortsport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(maListe, new Comparator<Piscine>() {
+                    @Override
+                    public int compare(Piscine o1, Piscine o2) {
+                        return o2.isSport()-o1.isSport();
+                    }
+                });
+                customAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

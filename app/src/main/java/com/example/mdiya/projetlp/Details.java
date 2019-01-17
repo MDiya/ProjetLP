@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.net.sip.SipSession;
 import android.nfc.Tag;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,8 @@ public class Details extends AppCompatActivity {
 
     private PrefManager prefManager;
     private String Tag ="123123123";
+    private  FloatingActionButton fab1,fab2,fab3,fab;
+    boolean isFABOpen = false;
 
 
     @Override
@@ -387,6 +390,7 @@ public class Details extends AppCompatActivity {
                                     for (String s : Objects.requireNonNull(lesJours.get(lasemaine[i]))) {
                                         finalHoraire.append(s).append(" ");
                                     }
+
                                 }
                                 else finalHoraire.append("fermé");
                                 finalHoraire.append("\n");
@@ -399,6 +403,23 @@ public class Details extends AppCompatActivity {
                         }
                     });
         }
+
+         fab = (FloatingActionButton) findViewById(R.id.fab);
+         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+         fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isFABOpen){
+                    showFABMenu();
+                }else{
+                    closeFABMenu();
+                }
+            }
+        });
+
+        fab2.setOnClickListener(gps);
     }
 
     @Override
@@ -415,5 +436,30 @@ public class Details extends AppCompatActivity {
         prefManager.setFirstTimeLaunch(true);
         startActivity(introduction);
         return true;
+    }
+    private void showFABMenu(){
+        isFABOpen=true;
+        fab1.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
+        fab2.animate().translationY(-getResources().getDimension(R.dimen.standard_105));
+        fab3.animate().translationY(-getResources().getDimension(R.dimen.standard_155));
+        fab.animate().rotation(90);
+    }
+
+    private void closeFABMenu(){
+        isFABOpen=false;
+        fab1.animate().translationY(0);
+        fab2.animate().translationY(0);
+        fab3.animate().translationY(0);
+        fab.animate().rotation(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isFABOpen){
+            closeFABMenu();
+        }
+        else {
+            finish();
+        }
     }
 }

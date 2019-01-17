@@ -87,6 +87,8 @@ class Piscine implements Comparable{
         return id;
     }
 
+    public String getAdr() {return adr;}
+
     @Override
     public String toString() {
         return ville+" "+nom;
