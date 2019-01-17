@@ -1,11 +1,16 @@
 package com.example.mdiya.projetlp;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.net.sip.SipSession;
 import android.nfc.Tag;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,11 +51,13 @@ public class Details extends AppCompatActivity {
     private  FloatingActionButton fab1,fab2,fab3,fab;
     boolean isFABOpen = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+//        LocationManager locationManager = (LocationManager) getSystemService(Details.this.LOCATION_SERVICE);
+//        LocationListener locationListener = new MyLocationListener();
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
         final TextView nom = (TextView) findViewById(R.id.nomEntier);
         final TextView nom_usuel = (TextView) findViewById(R.id.nomUsuel);
         final TextView addr = (TextView) findViewById(R.id.addr);
@@ -272,21 +279,25 @@ public class Details extends AppCompatActivity {
 
                     });
         }
-
-
-        tel.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener mytel = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!tel.getText().equals("")){
+                if(!tel.getText().equals("") ){
                     String tmp = "tel:"+tel.getText().toString().replace(" ", "");
                     Uri number = Uri.parse(tmp);
                     Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+                    if (ActivityCompat.checkSelfPermission(Details.this,
+                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(Details.this,
+                                "Vous ne pouvez pas appeler avec cet appareil",
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     startActivity(callIntent);
                 }
             }
-        });
-
-        site.setOnClickListener(new View.OnClickListener() {
+        };
+        View.OnClickListener myweb = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!site.getText().equals("")){
@@ -295,7 +306,8 @@ public class Details extends AppCompatActivity {
                     startActivity(webIntent);
                 }
             }
-        });
+        };
+
         View.OnClickListener gps = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -309,6 +321,9 @@ public class Details extends AppCompatActivity {
                 }
             }
         };
+        site.setOnClickListener(myweb);
+        tel.setOnClickListener(mytel);
+
         addr.setOnClickListener(gps);
         commune.setOnClickListener(gps);
         cp.setOnClickListener(gps);
@@ -418,8 +433,9 @@ public class Details extends AppCompatActivity {
                 }
             }
         });
-
+        fab1.setOnClickListener(myweb);
         fab2.setOnClickListener(gps);
+        fab3.setOnClickListener(mytel);
     }
 
     @Override
@@ -461,5 +477,16 @@ public class Details extends AppCompatActivity {
         else {
             finish();
         }
+    }
+
+    private double distFrom(double lat1, double lng1, double lat2, double lng2) {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng/2) * Math.sin(dLng/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return   earthRadius * c;
     }
 }

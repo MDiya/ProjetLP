@@ -49,6 +49,7 @@ public class Accueil extends AppCompatActivity {
 //                AppDatabase.class, "database-name").build();
         maListe = new ArrayList<Piscine>();
         final ListView myList = (ListView) findViewById(R.id.mylist);
+        TextView indispo = (TextView) findViewById(R.id.indisponible);
 
         customAdapter = new CustomAdapter(this);
         if(ConnexionInternet.isConnectedInternet(Accueil.this)){
@@ -137,6 +138,10 @@ public class Accueil extends AppCompatActivity {
                         }
 
                     });
+            indispo.setHeight(0);
+        }else{
+
+            indispo.setText("Pas de connexion!");
         }
 
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
