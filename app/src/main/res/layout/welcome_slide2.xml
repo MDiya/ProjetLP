@@ -58,7 +58,6 @@
         android:src="@drawable/ic_question"
         android:layout_centerHorizontal="true"/>
     <TextView
-        android:id="@+id/desc_question"
         android:layout_below="@+id/icon_question"
         android:layout_marginTop="5dp"
         android:textColor="#000"

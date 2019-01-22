@@ -1,6 +1,7 @@
 package com.example.mdiya.projetlp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomAdapter  extends BaseAdapter {
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
+public class CustomAdapter extends BaseAdapter {
 
     private Context context;
+    private DecimalFormat df = new DecimalFormat(".#");
 
     public CustomAdapter(Context context) {
         this.context = context;
-
     }
 
     @Override
@@ -64,6 +68,9 @@ public class CustomAdapter  extends BaseAdapter {
             holder.sport = (ImageView) convertView.findViewById(R.id.sport);
             holder.visite = (ImageView) convertView.findViewById(R.id.visite);
             holder.star = (ImageView) convertView.findViewById(R.id.star);
+
+            holder.distance = (TextView) convertView.findViewById(R.id.distance);
+
             convertView.setTag(holder);
         } else {
             // the getTag returns the viewHolder object set as a tag to the view
@@ -72,48 +79,47 @@ public class CustomAdapter  extends BaseAdapter {
 
         holder.ville.setText(Accueil.maListe.get(position).getVille());
         holder.nom.setText(Accueil.maListe.get(position).getNom());
+
+        df.setRoundingMode(RoundingMode.DOWN);
+
+        double distancePiscine = Accueil.maListe.get(position).getDist();
+        Log.e("dist conv->", String.valueOf(distancePiscine * 10));
+        holder.distance.setText(distancePiscine > 1.0 ? (df.format(distancePiscine) + " KM.") : df.format(distancePiscine * 1000) + " M.");
+
         float tmpNote = Accueil.maListe.get(position).getNote();
-        if (tmpNote >= 0){
+        if (tmpNote >= 0) {
             String tmpString = String.valueOf(Accueil.maListe.get(position).getNote());
             holder.note.setText(tmpString);
-        }
-        else {
+        } else {
             holder.note.setText("");
         }
-        if (Accueil.maListe.get(position).isLoisir() == 1){
+        if (Accueil.maListe.get(position).isLoisir() == 1) {
             holder.loisir.setImageResource(R.drawable.ic_checked);
-        }
-        else if (Accueil.maListe.get(position).isLoisir() == 0){
+        } else if (Accueil.maListe.get(position).isLoisir() == 0) {
             holder.loisir.setImageResource(R.drawable.ic_cancel);
-        }
-        else {
+        } else {
             holder.loisir.setImageResource(R.drawable.ic_question);
         }
-        if (Accueil.maListe.get(position).isPatauge() == 1){
+        if (Accueil.maListe.get(position).isPatauge() == 1) {
             holder.patauge.setImageResource(R.drawable.ic_checked);
-        }
-        else if(Accueil.maListe.get(position).isPatauge() == 0){
+        } else if (Accueil.maListe.get(position).isPatauge() == 0) {
             holder.patauge.setImageResource(R.drawable.ic_cancel);
-        }
-        else {
+        } else {
             holder.patauge.setImageResource(R.drawable.ic_question);
         }
-        if (Accueil.maListe.get(position).isSport() == 1){
+        if (Accueil.maListe.get(position).isSport() == 1) {
             holder.sport.setImageResource(R.drawable.ic_checked);
-        }
-        else if(Accueil.maListe.get(position).isSport() == 0){
+        } else if (Accueil.maListe.get(position).isSport() == 0) {
             holder.sport.setImageResource(R.drawable.ic_cancel);
-        }
-        else {
+        } else {
             holder.sport.setImageResource(R.drawable.ic_question);
         }
-        if (Accueil.maListe.get(position).isVisiter().equals("OUI")){
+        if (Accueil.maListe.get(position).isVisiter().equals("OUI")) {
             holder.visite.setImageResource(R.drawable.ic_checked);
-        }
-        else {
+        } else {
             holder.visite.setImageResource(R.drawable.ic_cancel);
         }
-        if (Accueil.maListe.get(position).isNoter().equals("OUI")){
+        if (Accueil.maListe.get(position).isNoter().equals("OUI")) {
             String tmpString = String.valueOf(Accueil.maListe.get(position).getNote());
             holder.note.setText(tmpString);
             holder.star.setImageResource(R.drawable.ic_starfull);
@@ -123,9 +129,8 @@ public class CustomAdapter  extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private ImageView loisir,patauge,sport,visite,star;
-        private TextView ville, nom, note;
-
+        private ImageView loisir, patauge, sport, visite, star;
+        private TextView ville, nom, note, distance;
     }
 }
 

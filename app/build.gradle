@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -45,4 +49,6 @@ dependencies {
 
     implementation 'com.getbase:floatingactionbutton:1.9.1'
 
+    // Google play location service
+    implementation 'com.google.android.gms:play-services-location:11.6.0'
 }

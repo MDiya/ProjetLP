@@ -1,18 +1,31 @@
 package com.example.mdiya.projetlp;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 
 public class Accueil extends AppCompatActivity {
@@ -46,7 +61,9 @@ public class Accueil extends AppCompatActivity {
         indispo = (TextView) findViewById(R.id.indisponible);
         customAdapter = new CustomAdapter(this);
 
-        if(ConnexionInternet.isConnectedInternet(Accueil.this)) {
+        this.getLocationService();
+
+        if (ConnexionInternet.isConnectedInternet(Accueil.this)) {
             Ion.with(Accueil.this)
                     .load("https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_piscines-nantes-metropole&rows=15")
                     .asJsonObject()
@@ -116,7 +133,14 @@ public class Accueil extends AppCompatActivity {
                                 } else {
                                     note = "NON";
                                 }
-                                Piscine piscine = new Piscine(nom, nomComplet, ville, loisir, patauge, sport, visit, note, id, lanote, adr);
+
+                                JsonArray location = null;
+                                if(fields.has("location")){
+                                    location = fields.getAsJsonArray("location");
+                                }
+                                double distance = distFrom(location.get(0).getAsDouble(), location.get(1).getAsDouble(), uLat, uLon);
+
+                                Piscine piscine = new Piscine(nom, nomComplet, ville, loisir, patauge, sport, visit, note, id, lanote, adr, distance);
                                 maListe.add(piscine);
 
                             }
@@ -168,11 +192,11 @@ public class Accueil extends AppCompatActivity {
                 Collections.sort(maListe, new Comparator<Piscine>() {
                     @Override
                     public int compare(Piscine o1, Piscine o2) {
-                        int res =0;
-                        if (o1.isVisiter().equals("OUI")){
+                        int res = 0;
+                        if (o1.isVisiter().equals("OUI")) {
                             res--;
                         }
-                        if (o2.isVisiter().equals("OUI")){
+                        if (o2.isVisiter().equals("OUI")) {
                             res++;
                         }
                         return res;
@@ -188,7 +212,7 @@ public class Accueil extends AppCompatActivity {
                 Collections.sort(maListe, new Comparator<Piscine>() {
                     @Override
                     public int compare(Piscine o1, Piscine o2) {
-                        return o2.isPatauge()-o1.isPatauge();
+                        return o2.isPatauge() - o1.isPatauge();
                     }
                 });
                 customAdapter.notifyDataSetChanged();
@@ -201,7 +225,22 @@ public class Accueil extends AppCompatActivity {
                 Collections.sort(maListe, new Comparator<Piscine>() {
                     @Override
                     public int compare(Piscine o1, Piscine o2) {
-                        return o2.isSport()-o1.isSport();
+                        return o2.isSport() - o1.isSport();
+                    }
+                });
+                customAdapter.notifyDataSetChanged();
+            }
+        });
+        TextView distance = (TextView) findViewById(R.id.nomDelaPiscine);
+        distance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(maListe, new Comparator<Piscine>() {
+                    @Override
+                    public int compare(Piscine o1, Piscine o2) {
+                        if (o1.getDist() < o2.getDist()) return -1;
+                        if (o1.getDist() > o2.getDist()) return 1;
+                        return 0;
                     }
                 });
                 customAdapter.notifyDataSetChanged();
@@ -217,6 +256,7 @@ public class Accueil extends AppCompatActivity {
             }
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -233,5 +273,67 @@ public class Accueil extends AppCompatActivity {
         return true;
     }
 
+    // Localitation
+    private double uLat = 0.0;
+    private double uLon = 0.0;
 
+    public void getLocationService() {
+        FusedLocationProviderClient providerClient = getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            // Gerer ca
+
+            checkPermissions();
+            return;
+        }
+        providerClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    uLat = location.getLatitude();
+                    uLon = location.getLongitude();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("U/L -> ", e.getMessage());
+            }
+        });
+    }
+
+    private boolean checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            requestPermissions();
+            return false;
+        }
+    }
+
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1234;
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+    }
+
+    private double distFrom(double latP, double lngP, double latU, double lngU) {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(latU - latP);
+        double dLng = Math.toRadians(lngU - lngP);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(latP)) * Math.cos(Math.toRadians(latU)) *
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadius * c;
+    }
 }

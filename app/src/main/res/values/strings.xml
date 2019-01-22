@@ -6,9 +6,7 @@ avez attribuée ainsi que si vous avez visité la piscine ou non</string>
     <string name="desc_2">En cliquant sur une piscine de la liste vous ouvrirez une nouvelle page avec les details de la piscine selectionnée.
 Vous pourrez ainsi les téléphoner(en cliquant sur leur numéro), les géolocaliser(en cliquant sur leur addresse) ou encore acceder à leurs sites (en cliquant sur leur url) (si les informations sont précisées).
 En descencant vous pourrez aussi dire si vous avez visité la piscine et lui attribuer une note sur 5. Cliquez sur valider pour enregistrer ces dernières informations</string>
-    <string name="title_activity_welcome">Home Screen</string>
     <string name="next">SUIVANT</string>
     <string name="skip">QUITTER</string>
     <string name="start">OK</string>
-    <string name="title_activity_main">MainActivity</string>
 </resources>

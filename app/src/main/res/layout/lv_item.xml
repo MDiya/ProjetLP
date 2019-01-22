@@ -37,6 +37,17 @@
                 android:textSize="20sp"
                 android:layout_below="@+id/nom"/>
 
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distance"
+                android:layout_marginBottom="20dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:layout_below="@+id/ville"/>
+
         </RelativeLayout>
         <ImageView
             android:id="@+id/loisir"

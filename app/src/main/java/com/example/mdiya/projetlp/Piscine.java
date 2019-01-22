@@ -4,11 +4,12 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-public class Piscine implements Comparable{
+
+public class Piscine implements Comparable {
 
     private String nom;
-    private  String nomComplet;
-    private  String ville;
+    private String nomComplet;
+    private String ville;
     private int loisir;
     private int patauge;
     private int sport;
@@ -17,32 +18,40 @@ public class Piscine implements Comparable{
     private String noter;
     private int id;
     private String adr;
+    private double dist;
 
-    public Piscine( String n,  String nc,  String v,  int l,
-                    int p, int s, String visiter, String noter,
-                    int i, float lanote, String adr){
-        this.nom =n;
+    public Piscine(String n, String nc, String v, int l,
+                   int p, int s, String visiter, String noter,
+                   int i, float lanote, String adr, double dist) {
+        this.nom = n;
         this.nomComplet = nc;
         this.ville = v;
         this.loisir = l;
         this.patauge = p;
-        this.sport =s;
+        this.sport = s;
         this.visiter = visiter;
         this.noter = noter;
-        this.id =i;
+        this.id = i;
         this.note = lanote;
-        this.adr=adr;
+        this.adr = adr;
+        this.dist = dist;
     }
 
-    public Piscine() {}
+    public String getNom() {
+        return nom;
+    }
 
-    public String getNom(){return nom;}
+    public String getVille() {
+        return ville;
+    }
 
-    public String getVille(){return ville;}
+    public String getNomComplet() {
+        return nomComplet;
+    }
 
-    public String getNomComplet(){return nomComplet;}
-
-    public float getNote(){return note;}
+    public float getNote() {
+        return note;
+    }
 
     public int isLoisir() {
         return loisir;
@@ -68,17 +77,19 @@ public class Piscine implements Comparable{
         return id;
     }
 
-    public String getAdr() {return adr;}
+    public String getAdr() {
+        return adr;
+    }
 
     @Override
     public String toString() {
-        return ville+" "+nom;
+        return ville + " " + nom;
     }
 
     @Override
     public int compareTo(Object o) {
-        int compare = ((Piscine)o).isLoisir();
-        return compare- this.isLoisir();
+        int compare = ((Piscine) o).isLoisir();
+        return compare - this.isLoisir();
     }
 
     public void setNom(String nom) {
@@ -123,5 +134,13 @@ public class Piscine implements Comparable{
 
     public void setAdr(String adr) {
         this.adr = adr;
+    }
+
+    public double getDist() {
+        return dist;
+    }
+
+    public void setDist(double dist) {
+        this.dist = dist;
     }
 }
