@@ -36,6 +36,7 @@
                 android:textColor="#000"
                 android:textSize="20sp"
                 android:layout_below="@+id/nom"/>
+
         </RelativeLayout>
         <ImageView
             android:id="@+id/loisir"

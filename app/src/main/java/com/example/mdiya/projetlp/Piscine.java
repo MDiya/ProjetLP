@@ -4,43 +4,22 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-//@Entity(tableName = "piscine_table")
-class Piscine implements Comparable{
-  //  @NonNull
-    //@ColumnInfo(name = "nom")
+public class Piscine implements Comparable{
+
     private String nom;
-    //@NonNull
-    //@ColumnInfo(name = "nomComplet")
     private  String nomComplet;
-    //@NonNull
-    //@ColumnInfo(name = "ville")
     private  String ville;
-    //@NonNull
-    //@ColumnInfo(name = "loisir")
     private int loisir;
-    //@NonNull
-    //@ColumnInfo(name = "pautage")
     private int patauge;
-    //@NonNull
-    //@ColumnInfo(name = "sport")
     private int sport;
-    //@NonNull
-    //@ColumnInfo(name = "note")
     private float note = -1;
-    //@NonNull
-    //@ColumnInfo(name = "visiter")
-    private boolean visiter;
-    //@NonNull
-    //@ColumnInfo(name = "noter")
-    private boolean noter;
-    //@PrimaryKey
-    //@NonNull
-    //@ColumnInfo(name = "id")
+    private String visiter;
+    private String noter;
     private int id;
     private String adr;
 
     public Piscine( String n,  String nc,  String v,  int l,
-                    int p, int s, boolean visiter, boolean noter,
+                    int p, int s, String visiter, String noter,
                     int i, float lanote, String adr){
         this.nom =n;
         this.nomComplet = nc;
@@ -54,6 +33,8 @@ class Piscine implements Comparable{
         this.note = lanote;
         this.adr=adr;
     }
+
+    public Piscine() {}
 
     public String getNom(){return nom;}
 
@@ -75,11 +56,11 @@ class Piscine implements Comparable{
         return sport;
     }
 
-    public boolean isVisiter() {
+    public String isVisiter() {
         return visiter;
     }
 
-    public boolean isNoter() {
+    public String isNoter() {
         return noter;
     }
 
@@ -98,5 +79,49 @@ class Piscine implements Comparable{
     public int compareTo(Object o) {
         int compare = ((Piscine)o).isLoisir();
         return compare- this.isLoisir();
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setNomComplet(String nomComplet) {
+        this.nomComplet = nomComplet;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public void setLoisir(int loisir) {
+        this.loisir = loisir;
+    }
+
+    public void setPatauge(int patauge) {
+        this.patauge = patauge;
+    }
+
+    public void setSport(int sport) {
+        this.sport = sport;
+    }
+
+    public void setNote(float note) {
+        this.note = note;
+    }
+
+    public void setVisiter(String visiter) {
+        this.visiter = visiter;
+    }
+
+    public void setNoter(String noter) {
+        this.noter = noter;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setAdr(String adr) {
+        this.adr = adr;
     }
 }

@@ -1,7 +1,5 @@
 package com.example.mdiya.projetlp;
 
-import android.annotation.SuppressLint;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,11 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,7 +19,6 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,110 +33,97 @@ public class Accueil extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private final int MYFLAG = 1234;
     private PrefManager prefManager;
-    //private FusedLocationProviderClient mFusedLocationClient;
-
+    ListView myList;
+    TextView indispo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accueil);
-//        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-//                AppDatabase.class, "database-name").build();
-        maListe = new ArrayList<Piscine>();
-        final ListView myList = (ListView) findViewById(R.id.mylist);
-        TextView indispo = (TextView) findViewById(R.id.indisponible);
 
+        maListe = new ArrayList<Piscine>();
+        myList = (ListView) findViewById(R.id.mylist);
+        indispo = (TextView) findViewById(R.id.indisponible);
         customAdapter = new CustomAdapter(this);
-        if(ConnexionInternet.isConnectedInternet(Accueil.this)){
-            Ion.with(this)
-                    .load( "https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_piscines-nantes-metropole&rows=15")
+
+        if(ConnexionInternet.isConnectedInternet(Accueil.this)) {
+            Ion.with(Accueil.this)
+                    .load("https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_piscines-nantes-metropole&rows=15")
                     .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>(){
+                    .setCallback(new FutureCallback<JsonObject>() {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
                             JsonArray records = result.getAsJsonArray("records");
                             Iterator<JsonElement> ite = records.iterator();
-                            while(ite.hasNext()){
+                            while (ite.hasNext()) {
+
                                 JsonObject item = ite.next().getAsJsonObject();
                                 JsonObject fields = item.getAsJsonObject("fields");
                                 String nom = fields.getAsJsonPrimitive("nom_usuel").getAsString();
                                 String nomComplet = fields.getAsJsonPrimitive("nom_complet").getAsString();
                                 String ville = fields.getAsJsonPrimitive("commune").getAsString();
-                                int loisir =0, patauge=0,sport=0;
+                                int loisir = 0, patauge = 0, sport = 0;
                                 float lanote = (float) 0.0;
-                                boolean visit, note;
+                                String visit, note;
                                 String adr = "";
-                                if (fields.has("adresse")){
-                                    adr = adr +fields.getAsJsonPrimitive("adresse").getAsString() +", ";
+                                if (fields.has("adresse")) {
+                                    adr = adr + fields.getAsJsonPrimitive("adresse").getAsString() + ", ";
+                                } else {
+                                    adr += ("");
                                 }
-                                else {
-                                    adr+=("");
+                                adr = adr + fields.getAsJsonPrimitive("commune").getAsString() + ", ";
+                                if (fields.has("cp")) {
+                                    adr = adr + fields.getAsJsonPrimitive("cp").getAsString();
                                 }
-                                adr = adr + fields.getAsJsonPrimitive("commune").getAsString()+ ", ";
-                                if (fields.has("cp")){
-                                    adr = adr +fields.getAsJsonPrimitive("cp").getAsString();
-                                }
-                                if(fields.has("bassin_loisir") ){
-                                    if (fields.getAsJsonPrimitive("bassin_loisir").getAsString().equals("OUI")){
+                                if (fields.has("bassin_loisir")) {
+                                    if (fields.getAsJsonPrimitive("bassin_loisir").getAsString().equals("OUI")) {
                                         loisir = 1;
-                                    }
-                                    else {
+                                    } else {
                                         loisir = 0;
                                     }
-                                }
-                                else{
+                                } else {
                                     loisir = -1;
                                 }
-                                if(fields.has("bassin_sportif")) {
+                                if (fields.has("bassin_sportif")) {
                                     if (fields.getAsJsonPrimitive("bassin_sportif").getAsString().equals("OUI")) {
                                         sport = 1;
                                     } else {
                                         sport = 0;
                                     }
-                                }
-                                else{
+                                } else {
                                     sport = -1;
                                 }
-                                if(fields.has("pataugeoire")){
-                                    if(fields.getAsJsonPrimitive("pataugeoire").getAsString().equals("OUI")) {
+                                if (fields.has("pataugeoire")) {
+                                    if (fields.getAsJsonPrimitive("pataugeoire").getAsString().equals("OUI")) {
                                         patauge = 1;
-                                    }
-                                    else {
+                                    } else {
                                         patauge = 0;
                                     }
-                                }
-                                else{
+                                } else {
                                     patauge = -1;
                                 }
                                 int id = fields.getAsJsonPrimitive("idobj").getAsInt();
                                 String myId = Integer.toString(id);
                                 sharedPreferences = Accueil.this.getSharedPreferences(myId, Context.MODE_PRIVATE);
-                                if(sharedPreferences.contains("sauv") && sharedPreferences.getBoolean("sauv", false)){
-                                    visit = true;
+                                if (sharedPreferences.contains("sauv") && sharedPreferences.getBoolean("sauv", false)) {
+                                    visit = "OUI";
+                                } else {
+                                    visit = "NON";
                                 }
-                                else {
-                                    visit = false;
+                                if (sharedPreferences.contains("rate")) {
+                                    note = "OUI";
+                                    lanote = sharedPreferences.getFloat("rate", 0);
+                                } else {
+                                    note = "NON";
                                 }
-                                if(sharedPreferences.contains("rate")){
-                                    note = true;
-                                    lanote = sharedPreferences.getFloat("rate",0);
-                                }
-                                else{
-                                    note = false;
-                                }
-                                Piscine piscine = new Piscine(nom,nomComplet,ville,loisir,patauge,sport,visit,note, id, lanote, adr);
+                                Piscine piscine = new Piscine(nom, nomComplet, ville, loisir, patauge, sport, visit, note, id, lanote, adr);
                                 maListe.add(piscine);
+
                             }
                             customAdapter.notifyDataSetChanged();
                             myList.setAdapter(customAdapter);
-
                         }
-
                     });
-            indispo.setHeight(0);
-        }else{
-
-            indispo.setText("Pas de connexion!");
         }
 
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -187,10 +169,10 @@ public class Accueil extends AppCompatActivity {
                     @Override
                     public int compare(Piscine o1, Piscine o2) {
                         int res =0;
-                        if (o1.isVisiter()){
+                        if (o1.isVisiter().equals("OUI")){
                             res--;
                         }
-                        if (o2.isVisiter()){
+                        if (o2.isVisiter().equals("OUI")){
                             res++;
                         }
                         return res;
@@ -235,7 +217,6 @@ public class Accueil extends AppCompatActivity {
             }
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -251,4 +232,6 @@ public class Accueil extends AppCompatActivity {
         startActivity(introduction);
         return true;
     }
+
+
 }

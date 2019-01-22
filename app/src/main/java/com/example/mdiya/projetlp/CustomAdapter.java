@@ -107,13 +107,13 @@ public class CustomAdapter  extends BaseAdapter {
         else {
             holder.sport.setImageResource(R.drawable.ic_question);
         }
-        if (Accueil.maListe.get(position).isVisiter()){
+        if (Accueil.maListe.get(position).isVisiter().equals("OUI")){
             holder.visite.setImageResource(R.drawable.ic_checked);
         }
         else {
             holder.visite.setImageResource(R.drawable.ic_cancel);
         }
-        if (Accueil.maListe.get(position).isNoter()){
+        if (Accueil.maListe.get(position).isNoter().equals("OUI")){
             String tmpString = String.valueOf(Accueil.maListe.get(position).getNote());
             holder.note.setText(tmpString);
             holder.star.setImageResource(R.drawable.ic_starfull);
