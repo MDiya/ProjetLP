@@ -46,7 +46,7 @@
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/addrCard"
                 android:layout_width="match_parent"
-                android:layout_marginHorizontal="1dp"
+                android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
                 card_view:cardElevation="2dp"
                 card_view:cardCornerRadius="5dp"
@@ -96,8 +96,7 @@
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/telCard"
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="1dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             card_view:cardElevation="2dp"
             card_view:cardCornerRadius="5dp"
@@ -118,40 +117,108 @@
                 android:textColor="#000"/>
         </RelativeLayout>
         </android.support.v7.widget.CardView>
-
-
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/horaireCard"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            card_view:cardElevation="2dp"
+            card_view:cardCornerRadius="5dp"
+            android:layout_below="@+id/telCard">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/horaire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp"
+                android:paddingVertical="3dp"
+                android:fontFamily="sans-serif-light"
+                android:text="horaires"
+                />
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/infoCard"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            card_view:cardElevation="2dp"
+            card_view:cardCornerRadius="5dp"
+            android:layout_below="@+id/horaireCard">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <TextView
                 android:id="@+id/complements"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Info compl"
-                android:layout_below="@+id/telCard"
+                android:layout_marginLeft="5dp"
                 android:textSize="20dp"
-                android:paddingBottom="20dp"
+                android:fontFamily="sans-serif-light"
+                android:layout_centerVertical="true"
+                android:paddingVertical="3dp"
                 android:textColor="#000"/>
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/siteCard"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            card_view:cardElevation="2dp"
+            card_view:cardCornerRadius="5dp"
+            android:layout_below="@+id/infoCard">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <TextView
-                android:id="@id/site"
+                android:id="@+id/site"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Site web"
                 android:textSize="20dp"
-                android:paddingBottom="20dp"
-                android:layout_below="@id/complements"
+                android:layout_marginLeft="5dp"
+                android:paddingVertical="3dp"
+                android:fontFamily="sans-serif-light"
                 android:textColor="#000"/>
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/infoCompCard"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            card_view:cardElevation="2dp"
+            card_view:cardCornerRadius="5dp"
+            android:layout_below="@+id/siteCard">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="3dp"
+            android:layout_marginLeft="5dp"
+            >
             <TextView
                 android:id="@+id/libreService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Libre service"
+                android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
-                android:layout_below="@+id/site"
                 android:textColor="#000"/>
             <ImageView
                 android:id="@+id/isLibreService"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_cancel"
-                android:layout_below="@+id/site"
                 android:layout_toRightOf="@+id/libreService"
                 android:paddingLeft="20dp"/>
             <TextView
@@ -159,6 +226,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bassin sportif"
+                android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
                 android:layout_below="@+id/libreService"
                 android:textColor="#000"/>
@@ -172,6 +240,7 @@
                 android:paddingLeft="20dp"/>
             <TextView
                 android:id="@+id/bassinLoisir"
+                android:fontFamily="sans-serif-light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bassin loisir"
@@ -189,6 +258,7 @@
             <TextView
                 android:id="@+id/apprentissage"
                 android:layout_width="wrap_content"
+                android:fontFamily="sans-serif-light"
                 android:layout_height="wrap_content"
                 android:text="Bassin apprentissage"
                 android:textSize="20dp"
@@ -204,6 +274,7 @@
                 android:paddingLeft="20dp"/>
             <TextView
                 android:id="@+id/plongeoir"
+                android:fontFamily="sans-serif-light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Plongeoir"
@@ -222,6 +293,7 @@
                 android:id="@+id/toboggan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
                 android:text="Toboggan"
                 android:textSize="20dp"
                 android:layout_below="@+id/plongeoir"
@@ -239,6 +311,7 @@
                 android:id="@+id/pataugeoire"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
                 android:text="Pataugeoire"
                 android:textSize="20dp"
                 android:layout_below="@+id/toboggan"
@@ -256,6 +329,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accessible handicape"
+                android:fontFamily="sans-serif-light"
                 android:textSize="20dp"
                 android:layout_below="@+id/pataugeoire"
                 android:textColor="#000"/>
@@ -267,49 +341,75 @@
                 android:layout_below="@+id/pataugeoire"
                 android:layout_toRightOf="@+id/handicap"
                 android:paddingLeft="20dp"/>
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/moyenPayementCard"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            card_view:cardElevation="2dp"
+            card_view:cardCornerRadius="5dp"
+            android:layout_below="@+id/infoCompCard">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <TextView
                 android:id="@+id/payement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Moyen de payement"
                 android:textSize="20dp"
-                android:paddingTop="10dp"
-                android:layout_below="@id/handicap"
+                android:paddingVertical="3dp"
+                android:fontFamily="sans-serif-light"
                 android:textColor="#000"/>
-
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
+            <RelativeLayout
+                android:id="@+id/layoutVisiter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moyenPayementCard"
+                android:layout_centerHorizontal="true"
+                >
             <TextView
                 android:id="@+id/visiter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Visité : "
-                android:layout_below="@+id/payement"
-                android:textSize="20dp"
+                android:layout_centerHorizontal="true"
+                android:textSize="25dp"
                 android:textColor="#000"
                 android:paddingTop="20dp"/>
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@+id/payement"
-                android:layout_toRightOf="@+id/visiter"
-                android:paddingTop="20dp">
-                <RadioButton
+                <Button
                     android:id="@+id/oui"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OUI"
+                    android:layout_below="@+id/visiter"
+                    android:background="@color/maCouleur"
+                    android:textColor="@color/white"
                     android:textSize="20dp"
-                    android:layout_marginRight="10dp"
-                    />
-                <RadioButton
+                    android:text="OUI"/>
+                <Button
                     android:id="@+id/non"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="NON"
+                    android:layout_below="@+id/visiter"
+                    android:layout_toRightOf="@+id/oui"
+                    android:textColor="@color/white"
                     android:textSize="20dp"
-                    />
-            </RadioGroup>
-
+                    android:background="@color/maCouleur"
+                    android:text="NON"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutVisiter"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/layoutNote"
+                >
             <TextView
                 android:id="@+id/textNote"
                 android:layout_width="wrap_content"
@@ -317,8 +417,6 @@
                 android:text="Note : "
                 android:textSize="20dp"
                 android:textColor="#000"
-                android:layout_below="@+id/visiter"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"/>
             <TextView
                 android:id="@+id/score"
@@ -327,15 +425,15 @@
                 android:text="0"
                 android:textColor="#000"
                 android:textSize="20dp"
-                android:layout_below="@+id/visiter"
                 android:layout_toRightOf="@+id/textNote"
                 android:layout_marginTop="10dp"/>
+            </RelativeLayout>
 
             <RatingBar
                 android:id="@+id/mySeekBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textNote"
+                android:layout_below="@+id/layoutNote"
                 android:max="5"
                 android:min="0"
                 android:layout_marginBottom="20dp"
@@ -343,25 +441,15 @@
                 android:stepSize="0.5"
                 />
 
-            <TextView
-                android:id="@+id/horaire"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mySeekBar"
-                android:textColor="#000"
-                android:textSize="20dp"
-                android:text="horaires"
-                android:layout_marginBottom="20dp"
-                />
             <Button
                 android:id="@+id/valider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="#33b5e5"
+                android:background="@color/maCouleur"
                 android:text="Valider"
-                android:layout_below="@+id/horaire"
-                android:textColor="#FFF"
+                android:layout_below="@+id/mySeekBar"
+                android:textColor="@color/white"
                 android:textSize="30dp"/>
 
 

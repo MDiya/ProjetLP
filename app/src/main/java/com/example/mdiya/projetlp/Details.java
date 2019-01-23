@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,8 +21,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,12 +78,16 @@ public class Details extends AppCompatActivity {
         final ImageView isPatauge = (ImageView) findViewById(R.id.isPataugeoire);
         final ImageView isHandicap = (ImageView) findViewById(R.id.isHandicap);
         final TextView payement = (TextView) findViewById(R.id.payement);
+        CardView addrCard = (CardView) findViewById(R.id.addrCard);
+        CardView telCard = (CardView) findViewById(R.id.telCard);
+        CardView siteCard = (CardView) findViewById(R.id.siteCard);
+        TextView visiter = (TextView) findViewById(R.id.visiter);
 
         final TextView score = (TextView) findViewById(R.id.score);
         final RatingBar maSeekBar = (RatingBar) findViewById(R.id.mySeekBar);
         Button valider = (Button) findViewById(R.id.valider);
-        final RadioButton oui = (RadioButton) findViewById(R.id.oui);
-        final RadioButton non = (RadioButton) findViewById(R.id.non);
+        final Button oui = (Button) findViewById(R.id.oui);
+        final Button non = (Button) findViewById(R.id.non);
 
         final String[] location = {""};
         final String[] tmpString = {""};
@@ -95,7 +102,6 @@ public class Details extends AppCompatActivity {
         lesJours.put("dimanche", new ArrayList<String>());
 
 
-
         maSeekBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -106,7 +112,11 @@ public class Details extends AppCompatActivity {
         Intent intent = getIntent();
         String pref = intent.getStringExtra("id");
         final SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences(pref, MODE_PRIVATE);
+        if(sharedPreferences.getBoolean("sauv",false)){
 
+            //visiter.setHeight(0);
+
+        }
         String url = "https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_piscines-nantes-metropole&q=idobj%3D";
         url = url + intent.getStringExtra("id");
         if (ConnexionInternet.isConnectedInternet(Details.this)){
@@ -264,14 +274,6 @@ public class Details extends AppCompatActivity {
                                 }
 
                             }
-                            if (sharedPreferences.contains("sauv")){
-                                oui.setChecked(sharedPreferences.getBoolean("sauv",false));
-                                non.setChecked(!sharedPreferences.getBoolean("sauv",false));
-                            }
-                            else {
-                                oui.setChecked(false);
-                                non.setChecked(true);
-                            }
                             if(sharedPreferences.contains("rate")){
                                 maSeekBar.setRating(sharedPreferences.getFloat("rate",0));
                             }
@@ -321,17 +323,29 @@ public class Details extends AppCompatActivity {
                 }
             }
         };
-        site.setOnClickListener(myweb);
-        tel.setOnClickListener(mytel);
+        siteCard.setOnClickListener(myweb);
+        telCard.setOnClickListener(mytel);
+        addrCard.setOnClickListener(gps);
 
-        addr.setOnClickListener(gps);
-        commune.setOnClickListener(gps);
-        cp.setOnClickListener(gps);
+        oui.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPreferences.edit().putBoolean("sauv",true).apply();
+                Toast.makeText(Details.this, "C'est noté ! (Valider pour enregistrer)", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        non.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPreferences.edit().putBoolean("sauv",false).apply();
+                Toast.makeText(Details.this, "C'est noté !", Toast.LENGTH_SHORT).show();
+            }
+        });
         valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(oui.isChecked()){
+                if(sharedPreferences.getBoolean("sauv",false)){
                     sharedPreferences.edit().putBoolean("sauv",true).apply();
                 }
                 else{
@@ -408,7 +422,9 @@ public class Details extends AppCompatActivity {
 
                                 }
                                 else finalHoraire.append("fermé");
-                                finalHoraire.append("\n");
+                                if(!lasemaine[i].equals("dimanche")){
+                                    finalHoraire.append("\n");
+                                }
                             }
 
                             if (vide){
