@@ -11,6 +11,7 @@ import android.net.sip.SipSession;
 import android.nfc.Tag;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -113,8 +114,9 @@ public class Details extends AppCompatActivity {
         String pref = intent.getStringExtra("id");
         final SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences(pref, MODE_PRIVATE);
         if(sharedPreferences.getBoolean("sauv",false)){
-
-            //visiter.setHeight(0);
+            oui.setVisibility(View.GONE);
+            non.setVisibility(View.GONE);
+            visiter.setHeight(0);
 
         }
         String url = "https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_piscines-nantes-metropole&q=idobj%3D";
@@ -288,8 +290,8 @@ public class Details extends AppCompatActivity {
                     String tmp = "tel:"+tel.getText().toString().replace(" ", "");
                     Uri number = Uri.parse(tmp);
                     Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
-                    if (ActivityCompat.checkSelfPermission(Details.this,
-                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(Details.this, Manifest.permission.CALL_PHONE)==
+                            PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(Details.this,
                                 "Vous ne pouvez pas appeler avec cet appareil",
                                 Toast.LENGTH_SHORT).show();

@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:textAlignment="center"
         android:layout_height="wrap_content"
-        android:text="Cet icon désigne le bassin loisir de la piscine."/>
+        android:text="Cet icône désigne le bassin loisir de la piscine."/>
     <ImageView
         android:id="@+id/icon_patauge"
         android:layout_below="@+id/desc_loisir"
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Cet icon désigne la pataugeoire de la piscine."/>
+        android:text="Cet icône désigne la pataugeoire de la piscine."/>
     <ImageView
         android:id="@+id/icon_sport"
         android:layout_below="@+id/desc_patauge"
@@ -66,5 +66,5 @@
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cet icon désigne le bassin sportif de la piscine."/>
+        android:text="Cet icône désigne le bassin sportif de la piscine."/>
 </RelativeLayout>

@@ -19,11 +19,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.JsonArray;
@@ -38,7 +40,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 
 public class Accueil extends AppCompatActivity {
@@ -60,7 +61,7 @@ public class Accueil extends AppCompatActivity {
         myList = (ListView) findViewById(R.id.mylist);
         indispo = (TextView) findViewById(R.id.indisponible);
         customAdapter = new CustomAdapter(this);
-
+        LinearLayout listyLayout = (LinearLayout) findViewById(R.id.listyLayout);
         this.getLocationService();
 
         if (ConnexionInternet.isConnectedInternet(Accueil.this)) {
@@ -135,10 +136,11 @@ public class Accueil extends AppCompatActivity {
                                 }
 
                                 JsonArray location = null;
+                                double distance = -1;
                                 if(fields.has("location")){
                                     location = fields.getAsJsonArray("location");
+                                    distance = distFrom(location.get(0).getAsDouble(), location.get(1).getAsDouble(), uLat, uLon);
                                 }
-                                double distance = distFrom(location.get(0).getAsDouble(), location.get(1).getAsDouble(), uLat, uLon);
 
                                 Piscine piscine = new Piscine(nom, nomComplet, ville, loisir, patauge, sport, visit, note, id, lanote, adr, distance);
                                 maListe.add(piscine);
@@ -148,8 +150,10 @@ public class Accueil extends AppCompatActivity {
                             myList.setAdapter(customAdapter);
                         }
                     });
+        }else{
+            listyLayout.setVisibility(View.GONE);
+            indispo.setText("Vous n'avez pas connection!");
         }
-
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -273,23 +277,14 @@ public class Accueil extends AppCompatActivity {
         return true;
     }
 
-    // Localitation
     private double uLat = 0.0;
     private double uLon = 0.0;
 
     public void getLocationService() {
-        FusedLocationProviderClient providerClient = getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            // Gerer ca
-
+        FusedLocationProviderClient providerClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             checkPermissions();
             return;
         }
@@ -300,11 +295,17 @@ public class Accueil extends AppCompatActivity {
                     uLat = location.getLatitude();
                     uLon = location.getLongitude();
                 }
+                else{
+                    uLat = 0;
+                    uLon =0;
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e("U/L -> ", e.getMessage());
+                uLat = 0;
+                uLon =0;
             }
         });
     }
@@ -328,12 +329,16 @@ public class Accueil extends AppCompatActivity {
 
     private double distFrom(double latP, double lngP, double latU, double lngU) {
         double earthRadius = 3958.75;
-        double dLat = Math.toRadians(latU - latP);
-        double dLng = Math.toRadians(lngU - lngP);
+        if(latU == 0 && lngU ==0){
+            return -1;
+        }
+        double dLat = Math.toRadians(latP - latU);
+        double dLng = Math.toRadians(lngP - lngU);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(Math.toRadians(latP)) * Math.cos(Math.toRadians(latU)) *
                         Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
         return earthRadius * c;
     }
 }

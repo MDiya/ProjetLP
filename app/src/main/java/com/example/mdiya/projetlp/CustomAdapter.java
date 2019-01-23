@@ -84,8 +84,13 @@ public class CustomAdapter extends BaseAdapter {
 
         double distancePiscine = Accueil.maListe.get(position).getDist();
         Log.e("dist conv->", String.valueOf(distancePiscine * 10));
-        holder.distance.setText(distancePiscine > 1.0 ? (df.format(distancePiscine) + " KM.") : df.format(distancePiscine * 1000) + " M.");
-
+        if(distancePiscine >0){
+            holder.distance.setText(distancePiscine > 1.0 ? (df.format(distancePiscine) + " KM.") : df.format(distancePiscine * 1000) + " M.");
+        }
+        else {
+            holder.distance.setText("");
+            holder.distance.setHeight(0);
+        }
         float tmpNote = Accueil.maListe.get(position).getNote();
         if (tmpNote >= 0) {
             String tmpString = String.valueOf(Accueil.maListe.get(position).getNote());
