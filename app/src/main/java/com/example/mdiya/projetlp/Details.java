@@ -373,7 +373,7 @@ public class Details extends AppCompatActivity {
         String fin = sdf.format(calendar_fin.getTime());
 
         String urlHoraires = "https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_piscines-nantes-metropole-horaires&q=date_fin+%3E+"
-                +debut+"+idobj%3D"+intent.getStringExtra("id")+"+date_debut%3C"+fin+"&rows=30";
+                +debut+"+idobj%3D"+intent.getStringExtra("id")+"+date_debut%3C"+fin+"&rows=30&q=type_horaire%3DOuverture";
         final ArrayList<String> lesHoraires = new ArrayList<String>();
         if (ConnexionInternet.isConnectedInternet(Details.this)){
             Ion.with(this)
